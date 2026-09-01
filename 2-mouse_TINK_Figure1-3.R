@@ -1,5 +1,3 @@
-#WIP for final posting- refer to 5-mouse_TINK_trajectory_inference for the script for generating NK_fate...
-
 #load libraries and set directories ----
 library(Seurat)
 library(ggplot2)
