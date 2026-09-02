@@ -84,8 +84,41 @@ kdm6b_track <- AnnotationTrack(
   cex.title = 0.5
 )
 
+#Gene plot with UcscTrack----
+gene_track <- UcscTrack(
+  genome = genome,
+  chromosome = chrom,
+  track = "NCBI RefSeq", #"NCBI RefSeq",
+  table = "refGene", #glitchy - try ncbiRefSeq or pull out "ucscTables("hg38", "NCBI RefSeq")" (or mm10) to find sub for "refGene" if not working or "ncbiRefSeqCurated"
+  from = start,
+  to = end,
+  trackType = "GeneRegionTrack",
+  rstarts = "exonStarts",
+  rends = "exonEnds",
+  gene = "name2",
+  symbol = "name2",
+  transcript = "name",
+  strand = "strand",
+  fill = "#2c3e50",
+  col = "#2c3e50",
+  name = " ", #no y axis label for now
+  cex.title = 1
+) 
 
-#Gene plot ----
+
+#(ALTERNATIVE) Gene plot with GeneRegionTrack----
+##note this is a temp fix that replcaes the original UcscTrack() lines, which are not working as of Sep 2026....
+q <- ucscTableQuery(
+  "hg38",
+  table = "ncbiRefSeq",
+  range = GRanges(
+    chrom,
+    IRanges(start, end)
+  )
+)
+
+refseq_test <- getTable(q)
+
 gene_track <- GeneRegionTrack(
   chromosome = chrom,
   genome = "hg38",
@@ -103,7 +136,7 @@ gene_track <- GeneRegionTrack(
   cex.title = 1
 )
 
-#gene plot forward strand only ---
+#(ALTERNATIVE) gene plot forward strand only ---
 refseq_fwd <- refseq_test[refseq_test$strand == "+", ]
 
 gene_track_fwd <- GeneRegionTrack(
@@ -128,6 +161,7 @@ gene_track_fwd <- GeneRegionTrack(
   name = " "
 )
 
+#set visuals for gene_track
 displayPars(gene_track) <- list(
   fill = "#2c3e50",          # deep blue fill for exons
   col = NA,                  # no exon borders
